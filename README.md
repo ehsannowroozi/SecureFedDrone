@@ -140,7 +140,119 @@ or
 
 jupyter notebook "SecureFedDrone Main Code.ipynb"
 
-------------------------------------------------------
+
+13. Limitations
+
+Despite its strong performance, the framework has several limitations, including reliance on simulation, limited scalability, and evaluation under a single attack model. These factors highlight opportunities for future improvements and real-world validation.
+
+14. Future Work
+
+Future research will focus on extending the framework to larger drone swarms, incorporating additional attack models, and deploying the system in real-world environments to validate its effectiveness under practical conditions.
+
+15. Citation
+XXXXXXXXXXXXXX
+
+-------------------------------------Coding Analyses-------------------
+
+## 16. Code–Paper Alignment Analysis
+
+This section provides a detailed technical mapping between the implementation in the repository (notebook and modules) and the methodology described in the SecureFedDrone paper. The goal is to ensure reproducibility, transparency, and a clear understanding of how theoretical constructs are instantiated in code.
+
+### 16.1 Overall Pipeline Correspondence
+
+Server-side watermark generation
+
+Client-side local training (FL + RL execution)
+
+Optional Byzantine attack injection
+
+Secure server-side verification and scoring
+
+Selective aggregation of trusted updates
+
+In the code, this loop is typically implemented as:
+
+for round in range(T):
+    distribute_model()
+    local_updates = client_training()
+    attacked_updates = apply_attack(local_updates)
+    scores = server_verification(attacked_updates)
+    global_model = secure_aggregation(scores)
+
+Each of these steps directly corresponds to a block in Algorithm 1, ensuring that the implementation is structurally faithful to the proposed framework.
+
+### 16.2 Federated Learning Implementation
+#### 16.2.1 Local Training (Equation 8)
+
+is implemented in the training loop where each drone computes gradients using PyTorch autograd:
+
+optimizer.zero_grad()
+loss.backward()
+optimizer.step()
+
+This corresponds exactly to standard SGD/Adam updates described in the paper.
+
+#### 16.2.2 FedAvg Aggregation (Equation 9)
+
+is implemented as an additional loss penalty:
+
+prox_loss = (mu / 2) * sum(torch.norm(w - w_global)**2 for w in model.parameters())
+loss += prox_loss
+
+This ensures stability under non-IID data, exactly as described in Section III-C.
+
+### 16.3 Byzantine Attack Implementation
+#### 16.3.1 Rescaled Gradient Noise Attack (Equation 11)
+
+followed by norm rescaling is implemented as:
+
+noise = torch.randn_like(grad) * beta
+v = grad + noise
+u = v * (grad.norm() / v.norm())
+
+This implementation preserves gradient magnitude while altering direction, which explains why norm-based defenses fail, as validated in Table VI (page 10).
+
+### 16.4 Watermarking Mechanism
+#### 16.4.1 Watermark Embedding (Equation 13)
+
+is implemented by perturbing selected parameters (Layer 4 of ResNet-50):
+
+watermark = alpha * carrier * (2 * signature - 1)
+model.layer4.weights += watermark
+
+The use of a carrier signal ensures spread-spectrum embedding across parameters, consistent with Section IV-A.
+
+#### 16.4.2 Watermark Verification (Equations 15–16)
+
+corr = torch.dot(w, expected_signal) / (torch.norm(w) * torch.norm(expected_signal))
+ber = (pred_bits != true_bits).float().mean()
+
+Threshold checks:
+
+if corr >= 0.85 and ber <= 0.05:
+    watermark_valid = True
+
+This directly matches the decision criteria defined in the paper.
+
+### 16.5 Gradient Hash-Chain Implementation
+#### 16.5.1 Hash Construction (Equation 14)
+
+is implemented using standard cryptographic hashing (e.g., SHA-256):
+
+grad_hash = sha256(serialize(gradients))
+H_t = sha256(prev_hash + str(t) + grad_hash)
+
+This ensures:
+
+Replay attack prevention
+
+Temporal consistency validation
+
+
+
+
+
+
 
 
 
