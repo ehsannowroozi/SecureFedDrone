@@ -112,4 +112,36 @@ The multi-layer defense mechanism successfully identifies malicious updates that
 
 Although the security mechanisms introduce additional computational overhead and increase the number of communication rounds required for convergence, the impact on communication bandwidth is negligible. This trade-off is justified by the significant gains in robustness and reliability.
 
+10. Repository Structure
+SecureFedDrone/
+│
+├── federated/
+├── security/
+├── rl/
+├── attacks/
+├── simulation/
+├── models/
+├── notebooks/
+├── utils/
+└── README.md
+
+
+11. Installation
+git clone https://github.com/yourusername/SecureFedDrone.git
+cd SecureFedDrone
+pip install -r requirements.txt
+12. Usage
+
+The framework can be executed either through the main script or via the provided Jupyter Notebook:
+
+python main.py
+
+or
+
+jupyter notebook "SecureFedDrone Main Code.ipynb"
+
+------------------------------------------------------
+
+
+
 
