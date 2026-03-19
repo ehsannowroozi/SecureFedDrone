@@ -6,8 +6,7 @@ SecureFedDrone is a comprehensive and security-oriented framework that integrate
 
 Unlike traditional centralized approaches, SecureFedDrone allows drones to train models locally and share only model updates, thereby preserving data privacy and reducing communication overhead. At the same time, it introduces a robust and multi-layered defense mechanism capable of detecting and mitigating Byzantine attacks, which are particularly challenging due to their stealthy nature and ability to mimic legitimate updates.
 
-This repository contains the full implementation corresponding to the research paper:
-👉
+This repository contains the full implementation corresponding to the research paper: XXXXX
 
 ## 2. Motivation and Problem Statement
 ### 2.1 Challenges in Multi-Drone Systems
