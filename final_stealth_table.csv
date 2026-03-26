@@ -1,0 +1,7 @@
+metric,pristine,malicious,relative_diff_%
+Mean Update Norm,2.8,2.87,2.5
+Cosine Similarity,0.9,0.83,-7.8
+Watermark Correlation,0.93,0.65,-30.1
+Watermark BER,0.02,0.115,475.0
+Hash-Chain Validity,99.76,85.7,-14.1
+Behavioral Deviation,0.23,0.7,204.3
